@@ -1,7 +1,6 @@
 /* ============================================================
-   SHARED — ShopWave
-   Included on every page. Contains tracking, data, cart,
-   product cards, modal, toast, nav helpers.
+   SHARED — ShopWave SPA
+   Single-page app helpers: tracking, data, cart, nav, modal, toast.
    ============================================================ */
 
 const TRACKING_CONTACT_NO = '923181018154';
@@ -87,7 +86,7 @@ const TESTIMONIALS = [
 ];
 
 /* ============================================================
-   CART — localStorage-based so state persists across pages
+   CART — localStorage-based
    ============================================================ */
 function getCart() {
   try { return JSON.parse(localStorage.getItem('shopwave_cart') || '[]'); } catch { return []; }
@@ -143,30 +142,51 @@ function updateNavCartCount() {
 }
 
 /* ============================================================
-   NAVIGATION
+   SPA NAVIGATION
    ============================================================ */
+let currentPage = 'home';
+
+const PAGE_TITLES = {
+  home:     'ShopWave – Modern E-Commerce',
+  products: 'Products – ShopWave',
+  cart:     'Cart – ShopWave',
+  signup:   'Sign Up – ShopWave',
+  contact:  'Contact – ShopWave'
+};
+
+function showPage(name) {
+  document.querySelectorAll('.page-section').forEach(s => { s.style.display = 'none'; });
+  const section = document.getElementById('page-' + name);
+  if (section) section.style.display = '';
+  currentPage = name;
+
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + name);
+  if (navEl) navEl.classList.add('active');
+
+  document.title = PAGE_TITLES[name] || 'ShopWave';
+  history.replaceState(null, '', name === 'home' ? '#' : '#' + name);
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  track('page_view', { page: document.title, section: name });
+
+  if (name === 'home') {
+    if (typeof renderFeatured     === 'function') renderFeatured();
+    if (typeof renderCategories   === 'function') renderCategories();
+    if (typeof renderTestimonials === 'function') renderTestimonials();
+  }
+  if (name === 'products' && typeof renderAllProducts === 'function') renderAllProducts();
+  if (name === 'cart'     && typeof renderCartItems   === 'function') renderCartItems();
+}
+
 function navigateTo(section) {
   track('nav_click', { section });
-  const map = { home: './index.html', products: './products.html', cart: './cart.html', signup: './signup.html', contact: './contact.html' };
-  window.location.href = map[section] || './index.html';
+  showPage(section);
 }
 
 function filterAndGo(filter) {
   track('category_click', { category: filter });
   sessionStorage.setItem('shopwave_filter', filter);
-  window.location.href = './products.html';
-}
-
-function updateNavActiveLink() {
-  const path = window.location.pathname;
-  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-  let id = 'nav-home';
-  if (path.includes('products')) id = 'nav-products';
-  else if (path.includes('cart'))    id = 'nav-cart';
-  else if (path.includes('signup'))  id = 'nav-signup';
-  else if (path.includes('contact')) id = 'nav-contact';
-  const el = document.getElementById(id);
-  if (el) el.classList.add('active');
+  showPage('products');
 }
 
 function toggleMobileMenu() {
@@ -306,9 +326,10 @@ document.addEventListener('keydown', e => {
   }
 });
 
-/* ---- run on every page ---- */
+/* ---- run on load ---- */
 document.addEventListener('DOMContentLoaded', () => {
   updateNavCartCount();
-  updateNavActiveLink();
-  track('page_view', { page: document.title, referrer: document.referrer || 'direct' });
+  const hash = window.location.hash.replace('#', '');
+  const valid = ['home', 'products', 'cart', 'signup', 'contact'];
+  showPage(valid.includes(hash) ? hash : 'home');
 });
