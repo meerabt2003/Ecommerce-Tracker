@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ShopWave – Modern E-Commerce</title>
-  <meta name="description" content="ShopWave – Discover premium products at unbeatable prices." />
+  <title>Products – ShopWave</title>
+  <meta name="description" content="Browse all ShopWave products — electronics, fashion, home & living, sports and more." />
 
   <!-- xNotify Event Tracker -->
   <script src="https://cdn.xnotify.ai/event-tracker-stg.js" data-property-id="PROP-XTI0UO7RD2" data-debug></script>
@@ -15,22 +15,6 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-
-  <!-- PROMO BANNER -->
-  <div id="promo-banner" data-track="banner-summer-sale" data-track-location="top">
-    <div class="promo-inner">
-      <span>🎉 Summer Sale — Up to <strong>50% off</strong> sitewide! Limited time only.</span>
-      <button class="promo-cta"
-        data-track="banner-shop-now"
-        data-track-location="promo-banner"
-        data-track-color="white"
-        onclick="window.location.href='./products.html'">Shop Now</button>
-    </div>
-    <button id="promo-close" aria-label="Close banner"
-      data-track="banner-dismiss"
-      data-track-location="promo-banner"
-      onclick="document.getElementById('promo-banner').style.display='none';track('promo_dismiss',{banner:'summer_sale'})">✕</button>
-  </div>
 
   <!-- NAVIGATION -->
   <nav id="navbar" role="navigation" aria-label="Main navigation">
@@ -62,93 +46,45 @@
     </div>
   </nav>
 
-  <!-- HERO -->
-  <div class="hero" id="hero-section">
-    <div class="container hero-inner">
-      <div class="hero-content">
-        <div class="hero-eyebrow">
-          <span class="hero-eyebrow-dot"></span>
-          <span>New Collection 2025</span>
-        </div>
-        <h1>Discover <span class="highlight">Premium</span> Products You'll Love</h1>
-        <p class="hero-desc">Handpicked quality products at unbeatable prices. From electronics to fashion — everything your lifestyle needs.</p>
-        <div class="hero-actions">
-          <a href="./products.html" class="btn btn-primary"
-            data-track="hero-shop-now"
-            data-track-location="hero"
-            data-track-color="purple">Shop Now →</a>
-          <a href="./products.html" class="btn btn-outline"
-            data-track="hero-explore-collection"
-            data-track-location="hero"
-            data-track-color="outline">Explore Collection</a>
-        </div>
-        <div class="hero-stats">
-          <div class="stat"><div class="stat-num">10K+</div><div class="stat-label">Products</div></div>
-          <div class="stat"><div class="stat-num">50K+</div><div class="stat-label">Customers</div></div>
-          <div class="stat"><div class="stat-num">4.9★</div><div class="stat-label">Rating</div></div>
-        </div>
-      </div>
-      <div class="hero-visual"><div class="hero-img-wrap">🛍️</div></div>
+  <!-- PAGE HERO -->
+  <div class="products-page-hero">
+    <div class="container">
+      <div class="section-tag">Our Catalog</div>
+      <h1>All Products</h1>
+      <p>Discover our full range of premium products</p>
     </div>
   </div>
 
-  <!-- CATEGORIES -->
-  <div class="categories-section">
-    <div class="container">
-      <div class="section-tag">Browse by Category</div>
-      <h2 class="section-title">Shop by Department</h2>
-      <div class="categories-grid" id="categories-grid"></div>
-    </div>
-  </div>
-
-  <!-- FEATURED PRODUCTS -->
-  <div class="featured-section">
-    <div class="container">
-      <div class="featured-header">
-        <div>
-          <div class="section-tag">Hand-Picked</div>
-          <h2 class="section-title">Featured Products</h2>
-        </div>
-        <a href="./products.html" class="btn btn-outline"
-          data-track="featured-view-all"
-          data-track-location="featured-section">View All Products</a>
+  <!-- PRODUCTS CONTENT -->
+  <div class="container products-content">
+    <div class="products-toolbar">
+      <div class="filter-tabs" id="filter-tabs" role="tablist" aria-label="Product categories">
+        <button class="filter-tab active" data-filter="all" role="tab" aria-selected="true"
+          data-track="filter-all" data-track-location="products-toolbar" data-track-filter="all"
+          onclick="filterProducts('all')">All</button>
+        <button class="filter-tab" data-filter="electronics" role="tab" aria-selected="false"
+          data-track="filter-electronics" data-track-location="products-toolbar" data-track-filter="electronics"
+          onclick="filterProducts('electronics')">Electronics</button>
+        <button class="filter-tab" data-filter="fashion" role="tab" aria-selected="false"
+          data-track="filter-fashion" data-track-location="products-toolbar" data-track-filter="fashion"
+          onclick="filterProducts('fashion')">Fashion</button>
+        <button class="filter-tab" data-filter="home" role="tab" aria-selected="false"
+          data-track="filter-home-living" data-track-location="products-toolbar" data-track-filter="home"
+          onclick="filterProducts('home')">Home &amp; Living</button>
+        <button class="filter-tab" data-filter="sports" role="tab" aria-selected="false"
+          data-track="filter-sports" data-track-location="products-toolbar" data-track-filter="sports"
+          onclick="filterProducts('sports')">Sports</button>
       </div>
-      <div class="products-grid" id="featured-grid"></div>
+      <select class="sort-select" id="sort-select" aria-label="Sort products"
+        data-track="sort-products" data-track-location="products-toolbar"
+        onchange="sortProducts(this.value)">
+        <option value="default">Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="name">Name A–Z</option>
+      </select>
     </div>
-  </div>
-
-  <!-- NEWSLETTER -->
-  <div class="newsletter-section" id="newsletter-section">
-    <div class="container">
-      <div class="newsletter-inner">
-        <h2>Get Exclusive Deals First</h2>
-        <p>Join 50,000+ savvy shoppers and never miss a deal. Unsubscribe any time.</p>
-        <form class="newsletter-form" id="newsletter-form"
-          data-track-form="newsletter-subscribe"
-          onsubmit="handleNewsletter(event)">
-          <input type="email" id="newsletter-email" name="newsletter_email"
-            placeholder="Enter your email address" required aria-label="Email address for newsletter" />
-          <button type="submit" class="btn btn-accent"
-            data-track="newsletter-subscribe"
-            data-track-location="newsletter-section"
-            data-track-color="pink">Subscribe →</button>
-        </form>
-        <div id="newsletter-success" style="display:none;margin-top:16px;color:rgba(255,255,255,.95);font-weight:600;">
-          ✅ You're subscribed! Check your inbox for a welcome gift.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- TESTIMONIALS -->
-  <div class="testimonials-section">
-    <div class="container">
-      <div style="text-align:center;margin-bottom:8px">
-        <div class="section-tag" style="display:inline-block">Happy Customers</div>
-      </div>
-      <h2 class="section-title" style="text-align:center">What People Are Saying</h2>
-      <div class="testimonials-grid" id="testimonials-grid"></div>
-    </div>
+    <div class="products-grid" id="products-grid"></div>
   </div>
 
   <!-- FOOTER -->
@@ -243,66 +179,49 @@
 
   <script src="./shared.js"></script>
   <script>
-    function renderFeatured() {
-      const grid = document.getElementById('featured-grid');
-      grid.innerHTML = '';
-      PRODUCTS.slice(0, 3).forEach(p => grid.appendChild(createProductCard(p, 'featured')));
-    }
+    let activeFilter = 'all';
+    let activeSort   = 'default';
 
-    function renderCategories() {
-      const grid = document.getElementById('categories-grid');
-      grid.innerHTML = '';
-      CATEGORIES.forEach(cat => {
-        const div = document.createElement('div');
-        div.className = 'category-card';
-        div.setAttribute('role', 'button');
-        div.setAttribute('tabindex', '0');
-        div.setAttribute('data-track', `category-${cat.filter}`);
-        div.setAttribute('data-track-location', 'categories-grid');
-        div.setAttribute('data-track-category', cat.filter);
-        div.innerHTML = `
-          <div class="category-icon">${cat.icon}</div>
-          <div class="category-name">${cat.name}</div>
-          <div class="category-count">${cat.count} item${cat.count !== 1 ? 's' : ''}</div>
-        `;
-        div.onclick = () => filterAndGo(cat.filter);
-        div.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') div.click(); };
-        grid.appendChild(div);
+    function filterProducts(filter) {
+      activeFilter = filter;
+      document.querySelectorAll('.filter-tab').forEach(btn => {
+        const isActive = btn.dataset.filter === filter;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', isActive);
       });
+      renderAllProducts();
+      track('filter_tab_click', { filter });
     }
 
-    function renderTestimonials() {
-      const grid = document.getElementById('testimonials-grid');
+    function sortProducts(sort) {
+      activeSort = sort;
+      renderAllProducts();
+      track('sort_change', { sort });
+    }
+
+    function renderAllProducts() {
+      const grid = document.getElementById('products-grid');
       grid.innerHTML = '';
-      TESTIMONIALS.forEach(t => {
-        const div = document.createElement('div');
-        div.className = 'testimonial-card';
-        div.innerHTML = `
-          <div class="testimonial-stars">${'★'.repeat(t.stars)}</div>
-          <p class="testimonial-text">${t.text}</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">${t.avatar}</div>
-            <div><div class="testimonial-name">${t.name}</div><div class="testimonial-role">${t.role}</div></div>
-          </div>
-        `;
-        grid.appendChild(div);
-      });
-    }
-
-    function handleNewsletter(e) {
-      e.preventDefault();
-      const email = document.getElementById('newsletter-email').value.trim();
-      if (!email) return;
-      document.getElementById('newsletter-success').style.display = 'block';
-      document.getElementById('newsletter-form').style.display = 'none';
-      showToast('📬 You\'re subscribed! Welcome to the family.', 'success');
-      track('newsletter_submit', { email_domain: email.split('@')[1] || 'unknown' });
+      let list = [...PRODUCTS];
+      if (activeFilter !== 'all') list = list.filter(p => p.category === activeFilter);
+      if (activeSort === 'price-asc')  list.sort((a, b) => a.price - b.price);
+      if (activeSort === 'price-desc') list.sort((a, b) => b.price - a.price);
+      if (activeSort === 'name')       list.sort((a, b) => a.name.localeCompare(b.name));
+      if (list.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text-muted)"><div style="font-size:3rem;margin-bottom:16px">🔍</div><p style="font-weight:600">No products found in this category yet.</p></div>`;
+        return;
+      }
+      list.forEach(p => grid.appendChild(createProductCard(p, 'products')));
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      renderFeatured();
-      renderCategories();
-      renderTestimonials();
+      const savedFilter = sessionStorage.getItem('shopwave_filter');
+      if (savedFilter) {
+        sessionStorage.removeItem('shopwave_filter');
+        filterProducts(savedFilter);
+      } else {
+        renderAllProducts();
+      }
     });
   </script>
 </body>
